@@ -6,7 +6,10 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -172,6 +175,56 @@ public class JpaUtils {
             throw new RuntimeException("Could not retrieve id from field", e);
         }
 
+    }
+
+    public static Object parseParam(String value, Class<?> type) {
+        Object result = value;
+
+        if (type != null) {
+            if (Boolean.class.isAssignableFrom(type)) {
+                result = Boolean.parseBoolean(value);
+            }
+            else if (Byte.class.isAssignableFrom(type)) {
+                result = Byte.parseByte(value);
+            }
+            else if (Short.class.isAssignableFrom(type)) {
+                result = Short.parseShort(value);
+            }
+            else if (Integer.class.isAssignableFrom(type)) {
+                result = Integer.parseInt(value);
+            }
+            else if (Long.class.isAssignableFrom(type)) {
+                result = Long.parseLong(value);
+            }
+            else if (Float.class.isAssignableFrom(type)) {
+                result = Float.parseFloat(value);
+            }
+            else if (Double.class.isAssignableFrom(type)) {
+                result = Double.parseDouble(value);
+            }
+            else if (BigInteger.class.isAssignableFrom(type)) {
+                result = new BigInteger(value);
+            }
+            else if (BigDecimal.class.isAssignableFrom(type)) {
+                result = new BigDecimal(value);
+            }
+            else if (Date.class.isAssignableFrom(type)) {
+                result = new Date(Long.parseLong(value));
+            }
+            else if (UUID.class.isAssignableFrom(type)) {
+                result = UUID.fromString(value);
+            }
+            else if (Enum.class.isAssignableFrom(type))  {
+                try {
+                    Method valueOf = type.getMethod("valueOf", String.class);
+                    result = valueOf.invoke(null, value);
+                }
+                catch (Exception ignored) {
+                }
+            }
+        }
+
+        return result;
     }
 
 }
