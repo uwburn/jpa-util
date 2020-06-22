@@ -13,7 +13,7 @@
     <name>jpa-util</name>
     <groupId>it.mgt.util</groupId>
     <artifactId>jpa</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <dependencies>
         <!-- JPA -->
